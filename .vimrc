@@ -43,27 +43,83 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 Plugin 'pangloss/vim-javascript'
-Plugin 'scrooloose/nerdtree'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'arcticicestudio/nord-vim'
 Plugin 'chriskempson/base16-vim'
 Plugin 'maxmellon/vim-jsx-pretty'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-commentary'
+Plugin 'w0rp/ale'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'suan/vim-instant-markdown', {'rtp': 'after'}
+Plugin 'sonph/onehalf', { 'rtp': 'vim' }
+Plugin 'dracula/vim', { 'name': 'dracula' }
+Plugin 'jaredgorski/spacecamp'
+Plugin 'euclio/vim-nocturne'
+Plugin 'fsharp/vim-fsharp'
+Plugin 'evanleck/vim-svelte', {'branch': 'main'}
+Plugin 'neovimhaskell/haskell-vim'
+Plugin 'glench/vim-jinja2-syntax'
+Plugin 'janko-m/vim-test'
+Plugin 'embear/vim-localvimrc'
+Plugin 'ParamagicDev/vim-medic_chalk'
+
 
 " indentation
 set shiftwidth=2
 set tabstop=2
+set softtabstop=2
+set expandtab
 
 " colors
-set termguicolors
 syntax on
-colorscheme base16-dracula
+colorscheme medic_chalk
+set t_Co=16
+set termguicolors
 
 "  bindings
   " copy the whole file to the system clipboard
 	nnoremap <C-a> :%y+<CR>
-	" :Files (fzf.vim)
-	nnoremap <silent> <C-f> :Files<CR>
+	" :GitFiles (fzf.vim)
+	nnoremap <silent> <C-f> :GitFiles<CR>
   " To open Nerd Tree
 	nmap <F6> :NERDTreeToggle<CR>
+	" change current word (like ciw) but repeatable with dot . for the same next
+  " word
+	nnoremap <silent> c<Tab> :let @/=expand('<cword>')<cr>cgn
 
+" others
+set relativenumber
+set noswapfile
+set backupcopy=yes
+
+" linters
+  " ale
+	let g:ale_linters = {
+\		'javascript': ['standard'],
+\ }
+	let g:ale_fixers = {'javascript': ['standard']}
+	let g:ale_lint_on_save = 1
+	let g:ale_fix_on_save = 1
+
+" markdown
+  " vim-instant-markdown
+  let g:instant_markdown_browser = "google-chrome-stable --new-window"
+
+" vim-test
+  " jest 
+  let g:test#javascript#runner = 'jest'
+
+augroup twig_ft
+  au!
+  autocmd BufNewFile,BufRead *.fs   set syntax=fsharp
+  autocmd BufNewFile,BufRead *.svelte   set syntax=svelte
+  autocmd BufNewFile,BufRead *.svelte   set filetype=svelte
+  autocmd BufNewFile,BufRead *.njk   set syntax=jinja
+  autocmd BufNewFile,BufRead *.cjs   set syntax=js
+augroup END
+
+" enables project specific .vimrc
+set exrc
+set secure
